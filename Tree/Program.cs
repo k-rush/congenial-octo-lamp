@@ -68,7 +68,6 @@ namespace Tree
                         current = parent;  // Now we can move on to the next level
                         Console.WriteLine($"******** Step {i} ********");
                         Print();
-                        
                         if (heapNodes.Count == 0) break;
                     }
                 }
@@ -78,27 +77,22 @@ namespace Tree
             //Construct a stack trace of a DFS to find the value we're seaking.
             private Stack<HeapNode<T>> DFSHelper(HeapNode<T> currentNode, Stack<HeapNode<T>> stack, T value, bool isLeft = true)
             {
-                
-                if (currentNode == null)
-                {
-                    return null;
-                }
+                // Base case, we've reached the end of the tree
+                if (currentNode == null) return null;
+
                 stack.Push(currentNode);
 
-                if (currentNode.Value.Equals(value))
-                    return stack;
-                else
-                {
-                    //Is there a ebtter way to do this? Does this even work?
-                    Stack<HeapNode<T>> tempStack = DFSHelper(currentNode.Left, stack, value, true) ?? DFSHelper(currentNode.Right, stack, value, false);
+                // This is the stack we're looking for, return it.
+                if (currentNode.Value.Equals(value)) return stack;
 
-                    if (tempStack == null)
-                    {
-                        stack.Pop();
-                        return null;
-                    }
-                    else return tempStack;
-                }
+                // Otherwise, if both children return null, pop the current node and return.
+                else return (DFSHelper(currentNode.Left, stack, value, true) ?? DFSHelper(currentNode.Right, stack, value, false)) ?? NullStackHelper(stack);
+            }
+
+            private Stack<HeapNode<T>> NullStackHelper(Stack<HeapNode<T>> stack)
+            {
+                stack.Pop();
+                return null;
             }
 
             private void AddNode(HeapNode<T> newNode)
