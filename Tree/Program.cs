@@ -43,7 +43,7 @@ namespace Tree
                 Print();
 
                 //Shape of the heap is correct, node is out of place
-                Stack<HeapNode<T>> heapNodes = DFSHelper(Head, new Stack<HeapNode<T>>(), node.Value);
+                Stack<HeapNode<T>> heapNodes = DFSStackCreator(Head, new Stack<HeapNode<T>>(), node.Value);
                 Console.WriteLine("Stack of nodes leading to value being added:");
                 PrintStack(heapNodes);
                 Console.WriteLine();
@@ -75,7 +75,7 @@ namespace Tree
             }
 
             //Construct a stack trace of a DFS to find the value we're seaking.
-            private Stack<HeapNode<T>> DFSHelper(HeapNode<T> currentNode, Stack<HeapNode<T>> stack, T value, bool isLeft = true)
+            private Stack<HeapNode<T>> DFSStackCreator(HeapNode<T> currentNode, Stack<HeapNode<T>> stack, T value, bool isLeft = true)
             {
                 // Base case, we've reached the end of the tree
                 if (currentNode == null) return null;
@@ -86,7 +86,7 @@ namespace Tree
                 if (currentNode.Value.Equals(value)) return stack;
 
                 // Otherwise, if both children return null, pop the current node and return.
-                else return (DFSHelper(currentNode.Left, stack, value, true) ?? DFSHelper(currentNode.Right, stack, value, false)) ?? NullStackHelper(stack);
+                else return (DFSStackCreator(currentNode.Left, stack, value, true) ?? DFSStackCreator(currentNode.Right, stack, value, false)) ?? NullStackHelper(stack);
             }
 
             private Stack<HeapNode<T>> NullStackHelper(Stack<HeapNode<T>> stack)
